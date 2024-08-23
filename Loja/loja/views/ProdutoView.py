@@ -4,6 +4,26 @@ from loja.models import Produto
 from datetime import timedelta, datetime
 from django.utils import timezone
 
+def delete_produto_view(request, id=None):
+    # Processa o evento GET gerado pela action
+    produtos = Produto.objects.all()
+    if id is not None:
+        produtos = produtos.filter(id=id)
+    produto = produtos.first()
+    print(produto)
+    context = {'produto': produto}
+    return render(request, template_name='produto/produto-delete.html', context=context, status=200)
+
+def details_produto_view(request, id=None):
+    # Processa o evento GET gerado pela action
+    produtos = Produto.objects.all()
+    if id is not None:
+        produtos = produtos.filter(id=id)
+    produto = produtos.first()
+    print(produto)
+    context = { 'produto': produto}
+    return render(request, template_name='produto/produto-details.html', context=context, status=200)
+
 # adicione a função que trata o postback da interface de edição
 def edit_produto_postback(request, id=None):
 # Processa o post back gerado pela action
@@ -67,5 +87,7 @@ def list_produto_view(request, id=None):
     # Adicione para definir o contexto e carregar o template
     context = {'produtos': produtos}
     return render(request, template_name='produto/produto.html', context=context, status=200)
+
+    
 
     
