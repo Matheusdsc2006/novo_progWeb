@@ -3,10 +3,8 @@ from django.shortcuts import render, redirect
 from loja.models import Produto, Fabricante, Categoria
 from datetime import timedelta, datetime
 from django.utils import timezone
-# inclua as bibliotecas FileSystemStorage
 from django.core.files.storage import FileSystemStorage
-
-
+from django.contrib.auth.decorators import login_required
 
 def create_produto_view(request, id=None):
     Fabricantes = Fabricante.objects.all()
@@ -98,6 +96,7 @@ def details_produto_view(request, id=None):
     context = { 'produto': produto}
     return render(request, template_name='produto/produto-details.html', context=context, status=200)
 
+@login_required   
 # adicione a função que trata o postback da interface de edição
 def edit_produto_postback(request, id=None):
 # Processa o post back gerado pela action
