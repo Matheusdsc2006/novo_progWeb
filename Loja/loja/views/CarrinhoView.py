@@ -89,16 +89,16 @@ def confirmar_carrinho_view(request):
         usuario = get_object_or_404(Usuario, user=request.user)
         print ('Usuario: ' + str(usuario))
         if usuario:
-            carrinho.user_id = usuario.id
+            carrinho.user = usuario
             carrinho.situacao = 1
-            carrinho.confirmado_em = timezone.make_aware(datetime.today())
-            carrinho.save()
+            carrinho.confirmado_em = timezone.now()
+            carrinho.save
             #Limpar carrinho na sessão
-
             print ('carrinho salvo')
     context = {
         'carrinho': carrinho
     }
+    carrinho = None
     return render(request, 'carrinho/carrinho-confirmado.html', context=context)
 
 # Função para excluir um item do carrinho
