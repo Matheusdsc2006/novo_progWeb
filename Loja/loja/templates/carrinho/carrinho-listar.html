@@ -20,7 +20,15 @@
             {% for item in itens %}
                 <div class="row">
                     <a class="col-md-4"> {{ item.produto.Produto }}</a>
-                    <a class="col-md-2"> {{ item.quantidade }}</a>
+                    <div class="col-md-2 d-flex">
+                        <form method="POST" action="{% url 'diminuir_quantidade' item.id %}"> {% csrf_token %} 
+                            <button type="submit" class="btn btn-sm bg-secondary"><i class="fa fa-minus"></i></button>
+                        </form>
+                        <span class="mx-2">{{ item.quantidade }}</span>
+                        <form method="POST" action="{% url 'aumentar_quantidade' item.id %}"> {% csrf_token %} 
+                            <button type="submit" class="btn btn-sm bg-secondary"><i class="fa fa-plus"></i></button>
+                        </form>
+                    </div>                
                     <a class="col-md-2">R$ {{ item.preco|floatformat:2 }}</a>
                     <a class="col-md-2">R$ {{ item.total }}</a>
                     <a class="col-md-2"> 
@@ -31,7 +39,7 @@
                     </a>
                 </div>
             {% endfor %}
-            <h5 class="mt-4">Total: R$ {{ carrinho.total|floatformat:2 }}</h3>
+            <h5 class="mt-4">Total: R$ {{ carrinho.total|floatformat:2 }}</h3>  
             <div class="mt-4">
                 <a href="{% url 'home' %}" class="btn btn-secondary">Voltar à loja</a>
                 <a href="{% url 'confirmar_carrinho' %}" class="btn btn-success">Finalizar Compra</a>

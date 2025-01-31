@@ -3,6 +3,9 @@ from loja.models import Produto, Carrinho, CarrinhoItem, Usuario
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 # Função para adicionar um item ao carrinho
 def create_carrinhoitem_view(request, produto_id=None):
@@ -94,6 +97,7 @@ def confirmar_carrinho_view(request):
             carrinho.confirmado_em = timezone.now()
             carrinho.save
             #Limpar carrinho na sessão
+            request.session.pop('carrinho_id', None)
             print ('carrinho salvo')
     context = {
         'carrinho': carrinho
@@ -108,4 +112,17 @@ def remover_item_view(request, item_id):
     carrinho_id = request.session.get('carrinho_id')
     if carrinho_id == item.carrinho.id:
         item.delete()
+    return redirect('/carrinho')
+
+def aumentar_quantidade(request, item_id):
+    item = get_object_or_404(CarrinhoItem, id=item_id)
+    item.quantidade += 1
+    item.save()
+    return redirect('/carrinho')
+
+def diminuir_quantidade(request, item_id):
+    item = get_object_or_404(CarrinhoItem, id=item_id)
+    if item.quantidade > 1:
+        item.quantidade -= 1
+        item.save()
     return redirect('/carrinho')
